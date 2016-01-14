@@ -1,0 +1,22 @@
+---
+title: "Questions for Assignment1"
+output: pdf_document
+---
+
+1:
+for NHIS_2007_RData, I dont have a default “From .RData. Note that `.RData` files come with names already assigned to their data structures. What is the name assigned to this RData file?”, and as I downloaded it, there was no .rdata, why?
+
+2:where are those things?
+pico ~/[github_dir]/[repo]/.git/config
+
+3:
+how to calculate mean price of diamonds witha "fair"-cut without taking a subset of it?
+
+  carat       cut clarity price
+1   5.0      fair     SI1   850
+2   2.0      good      I1   450
+3   0.5 very good     VI1   450
+4   1.5      good     VS1    NA
+5   5.0      fair      IF   750
+6    NA     ideal    VVS2   980
+7   3.0      fair    <NA>   420
