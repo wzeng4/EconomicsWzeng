@@ -39,17 +39,30 @@ WenhanZengAssignment2$s2d <- mean(NHIS$weight) # mean weight.
 WenhanZengAssignment2$s2e <- median(NHIS$weight) # median weight.
 #I didn't take the group with 996~999 pounds out in questions above, though these are just different type of missing value.
 NHIS["ADJweight"] <-ifelse(NHIS$weight>900,NA,NHIS$weight)
-WenhanZengAssignment2$s2d<- mean(NHIS$ADJweight) # mean weight.
 
-hist(NHIS$weight,main="Histogram of weight",
+hist(NHIS$ADJweight,main="Histogram of weight",
      xlab="weight",
      ylab="frequency",
      border="black",
      col="cadetblue",
      breaks=40)
+table(NHIS$weight)
+table(NHIS$ADJweight)
   
-  
-  
+WenhanZengAssignment2$s2f<- mean(NHIS$ADJweight,na.rm = T) # mean weight after adjustment.
+WenhanZengAssignment2$s2g <- median(NHIS$ADJweight,na.rm=T) # adjusted median weight
+
+NHIS$femaleweight <-ifelse(NHIS$SEX==2,NHIS$ADJweight,NA)
+WenhanZengAssignment2$s2h <-summary(NHIS$femaleweight,na.rm=T)
+NHIS$maleweight <-ifelse(NHIS$SEX==1,NHIS$ADJweight,NA)
+WenhanZengAssignment2$s2i <-summary(NHIS$maleweight,na.rm=T)
+
+# a better way to solve this without creating new variables is using:
+aggregate(NHIS$ADJweight,list(sex=NHIS$SEX),summary)
+
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
+# Question 3
+
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
 #    save(CurtisKephartAssignment2,
