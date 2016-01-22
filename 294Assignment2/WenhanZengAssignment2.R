@@ -6,7 +6,7 @@
 # ---
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
-# Question 0
+# Question 0<\ni\%\digamma\bigcap\eqslantgtr\Rightarrow
 
 WenhanZengAssignment2 <- list(
   firstName = "Wenhan",
@@ -83,7 +83,7 @@ WenhanZengAssignment2$s3e <- paste(arr[2,2,3],arr[2,2,1],arr[2,2,2],  sep = "")
 # Question 4
 setwd("/Users/Zephyr/Desktop/2015-2016Master@UCSC/294a Lab/EconomicsWzeng/294Assignment2")
 library(foreign)
-org.dta<-read.dta("org_example.dta")
+org.dta<-read.dta(\alphaorg_example.dta")
 
 # I cant't work in this way but don't know the reason:
 # orgtest <- read.dta(file="https://github.com/EconomiCurtis/econ294_2015/blob/master/data/org_example.dta")
