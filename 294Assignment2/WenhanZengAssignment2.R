@@ -81,7 +81,7 @@ WenhanZengAssignment2$s3e <- paste(arr[2,2,3],arr[2,2,1],arr[2,2,2],  sep = "")
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
 # Question 4
-setwd("/Users/Zephyr/Desktop/2015-2016Master@UCSC/294a Lab/Econ294Wenhan/294Assignment2")
+setwd("/Users/Zephyr/Desktop/2015-2016Master@UCSC/294a Lab/EconomicsWzeng/294Assignment2")
 library(foreign)
 org.dta<-read.dta("org_example.dta")
 
@@ -93,9 +93,12 @@ WenhanZengAssignment2$s4 <-aggregate(org.dta$rw,list(year=org.dta$year,
                           ),
           mean,na.rm=T)
 
+VA<-View(data.frame(aggregate(org.dta$rw,list(year=org.dta$year,
+                                              month=org.dta$month,
+                                              educ=org.dta$educ
+),
+mean,na.rm=T)
+))
 
 save(WenhanZengAssignment2,
      file = "/Users/Zephyr/Desktop/2015-2016Master@UCSC/294a Lab/Econ294Wenhan/294Assignment2/WenhanZengAssignment2.rdata")
-
-
-
