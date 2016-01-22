@@ -2,7 +2,7 @@
 # title: Assignment 2
 # author: "Wenhan Zeng"
 # date: "Jan.21.2016"
-# assignment: https://github.com/EconomiCurtis/econ294_2015/blob/master/Assignments/Econ_294_Assignment_2.pdf
+# assignment: https://github.com/wzeng4/EconomicsWzeng/tree/master/294Assignment2
 # ---
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
@@ -18,7 +18,7 @@ WenhanZengAssignment2 <- list(
 # Question 1
 library(foreign)
 diamonds<-get(
-    load(file=url("https://github.com/EconomiCurtis/econ294_2015/raw/master/data/diamonds.RData"))
+  load(file=url("https://github.com/EconomiCurtis/econ294_2015/raw/master/data/diamonds.RData"))
 )
 
 
@@ -48,7 +48,7 @@ hist(NHIS$ADJweight,main="Histogram of weight",
      breaks=40)
 table(NHIS$weight)
 table(NHIS$ADJweight)
-  
+
 WenhanZengAssignment2$s2f<- mean(NHIS$ADJweight,na.rm = T) # mean weight after adjustment.
 WenhanZengAssignment2$s2g <- median(NHIS$ADJweight,na.rm=T) # adjusted median weight
 
@@ -61,7 +61,7 @@ WenhanZengAssignment2$s2i <-summary(NHIS$maleweight,na.rm=T)
 aggregate(NHIS$ADJweight,list(sex=NHIS$SEX),summary)
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
-# Question 3
+# Question 3 
 
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
