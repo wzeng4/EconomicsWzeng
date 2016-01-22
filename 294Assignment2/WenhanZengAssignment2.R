@@ -63,6 +63,7 @@ aggregate(NHIS$ADJweight,list(sex=NHIS$SEX),summary)
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
 # Question 3 
 
+<<<<<<< HEAD
 print(vec <- c(letters,LETTERS))
 WenhanZengAssignment2$s3a <- vec[c(T,F)]
 WenhanZengAssignment2$s3b <- paste(vec[c(49,5,14)], collapse="")
@@ -75,6 +76,8 @@ WenhanZengAssignment2$s3c <- arr[c(1,2,3),1,2]
 WenhanZengAssignment2$s3d <- arr[2,2,c(1,2,3)]
 
 WenhanZengAssignment2$s3e <- paste(arr[2,2,3],arr[2,2,1],arr[2,2,2],  sep = "")
+=======
+>>>>>>> origin/master
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
 # Question 4
