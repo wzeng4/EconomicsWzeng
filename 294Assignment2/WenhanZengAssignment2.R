@@ -2,7 +2,7 @@
 # title: Assignment 2
 # author: "Wenhan Zeng"
 # date: "Jan.21.2016"
-# assignment: https://github.com/EconomiCurtis/econ294_2015/blob/master/Assignments/Econ_294_Assignment_2.pdf
+# assignment: https://github.com/wzeng4/EconomicsWzeng/tree/master/294Assignment2
 # ---
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
@@ -18,7 +18,7 @@ WenhanZengAssignment2 <- list(
 # Question 1
 library(foreign)
 diamonds<-get(
-    load(file=url("https://github.com/EconomiCurtis/econ294_2015/raw/master/data/diamonds.RData"))
+  load(file=url("https://github.com/EconomiCurtis/econ294_2015/raw/master/data/diamonds.RData"))
 )
 
 
@@ -48,7 +48,7 @@ hist(NHIS$ADJweight,main="Histogram of weight",
      breaks=40)
 table(NHIS$weight)
 table(NHIS$ADJweight)
-  
+
 WenhanZengAssignment2$s2f<- mean(NHIS$ADJweight,na.rm = T) # mean weight after adjustment.
 WenhanZengAssignment2$s2g <- median(NHIS$ADJweight,na.rm=T) # adjusted median weight
 
@@ -61,14 +61,38 @@ WenhanZengAssignment2$s2i <-summary(NHIS$maleweight,na.rm=T)
 aggregate(NHIS$ADJweight,list(sex=NHIS$SEX),summary)
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
-# Question 3
+# Question 3 
 
+print(vec <- c(letters,LETTERS))
+WenhanZengAssignment2$s3a <- vec[c(T,F)]
+WenhanZengAssignment2$s3b <- paste(vec[c(49,5,14)], collapse="")
+
+arr <- array(
+  c(letters,LETTERS),
+  dim = c(3,3,3))
+print(arr)
+WenhanZengAssignment2$s3c <- arr[c(1,2,3),1,2]
+WenhanZengAssignment2$s3d <- arr[2,2,c(1,2,3)]
+
+WenhanZengAssignment2$s3e <- paste(arr[2,2,3],arr[2,2,1],arr[2,2,2],  sep = "")
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
-#    save(CurtisKephartAssignment2,
-#         file = "Assignments/CurtisKephartAssignment2.RData")
+# Question 4
+setwd("/Users/Zephyr/Desktop/2015-2016Master@UCSC/294a Lab/Econ294Wenhan/294Assignment2")
+library(foreign)
+org.dta<-read.dta("org_example.dta")
+
+# I cant't work in this way but don't know the reason:
+# orgtest <- read.dta(file="https://github.com/EconomiCurtis/econ294_2015/blob/master/data/org_example.dta")
+WenhanZengAssignment2$s4 <-aggregate(org.dta$rw,list(year=org.dta$year,
+                          month=org.dta$month,
+                          educ=org.dta$educ
+                          ),
+          mean,na.rm=T)
 
 
+save(WenhanZengAssignment2,
+     file = "/Users/Zephyr/Desktop/2015-2016Master@UCSC/294a Lab/Econ294Wenhan/294Assignment2/WenhanZengAssignment2.rdata")
 
 
 
