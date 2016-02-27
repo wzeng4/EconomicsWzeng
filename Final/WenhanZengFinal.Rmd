@@ -1,0 +1,30 @@
+---
+title: "Econ 294 Final Exam"
+author: "WenhanZeng"
+date: "2016-03-16"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Preperation
+Load required packages.
+
+```{r}
+library(foreign)
+library(ggplot2)
+library(knitr)
+library(nycflights13)
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
