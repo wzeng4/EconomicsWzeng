@@ -1,6 +1,6 @@
 ---
 title: "Econ 294 Final Exam"
-author: "WenhanZeng"
+author: "WenhanZeng, ID:1504976"
 date: "2016-03-16"
 output: pdf_document
 ---
@@ -9,22 +9,126 @@ output: pdf_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## Preperation
+### Preperation
 Load required packages.
 
-```{r}
+```{r,warning = F}
 library(foreign)
 library(ggplot2)
 library(knitr)
 library(nycflights13)
+library(dplyr)
+library(tidyr)
+library(RSQLite)
 ```
 
-## Including Plots
+### Part a)
+## Require data from database
+```{r}
+my_db<- src_sqlite("nycflights13.sqlite", create = T)
+flights_sqlite <- copy_to(
+  my_db, flights, temporary = FALSE, 
+  indexes = list(
+    c("year", "month", "day"), 
+    "carrier", 
+    "tailnum")
+)
+flights<-collect(flights_sqlite)
 
-You can also embed plots, for example:
+airlines_sqlite <- copy_to(
+  my_db, airlines, temporary = FALSE, 
+  indexes = list("carrier")
+)
+airlines<-collect(airlines_sqlite)
 
-```{r pressure, echo=FALSE}
-plot(pressure)
+airports_sqlite <- copy_to(
+  my_db, airports, temporary = FALSE, 
+  indexes = list("faa")
+)
+airports<-collect(airports_sqlite)
+
+planes_sqlite <- copy_to(
+  my_db, planes, temporary = FALSE, 
+  indexes = list("tailnum")
+)
+planes<-collect(planes_sqlite)
+
+weather_sqlite <- copy_to(
+  my_db, weather, temporary = FALSE, 
+  indexes = list(
+    c("year", "month","day","hour"),
+    "origin")
+)
+weather<-collect(weather_sqlite)
 ```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+## Creat column "date"
+``` {r}
+final<- final %>%
+  mutate(canceled= ifelse(is.na(arr_time),1,0))%>%
+  unite(
+    col=date,
+    ...=year,month,day,
+    sep="-"
+  )
+
+weather<-weather %>%
+  unite(
+    col=date,
+    ...=year,month,day,
+    sep="-"
+  ) %>%
+  select(origin:wind_gust,visib)
+```
+## Merge flights with weather, we find the matched variables first:
+```{r}
+names(final)[names(final) %in% names(weather)]
+```
+```{r}
+finalw<-final %>%
+  left_join(weather, by=c('date','hour','origin'))
+```
+## Keep all flights with weather information
+```{r}
+finalw<-finalw %>%
+  filter(is.na(temp)==F) %>%
+  group_by(canceled)
+```
+## Run the regression
+```{r}
+regdelay<-lm(dep_delay~temp+dewp+wind_speed+visib,finalw)
+summary(reg)
+regcancel<-glm(canceled~dep_delay+temp+dewp+humid+wind_speed+visib,finalw,family = binomial(logit))
+summary(regcancel)
+```
+
+Those two reggressions tell us that:
+1) For "dep_delay": temerature, dewpoint, wind speed and visibility are all statistically  significant.
+2) For "canceled" : dep_dlay, dewp, humid, visib are statistically significant. We see that when the time of delay increases, it is more unlikely to see the flight canceled (though this is quite counter-intuitive). While the "visib" goes down, it is more likely to be canceled.
+
+## Plot a graph
+```{r, echo=F, fig.height=3, include=F}
+p1<-ggplot(
+  data = finalw,
+  aes(x = temp,y=dep_delay,size=wind_speed)
+)+
+  geom_point(aes(colour=visib), alpha=0.4)
+p1
+```
+As we can see above, black points, which indicates low visibility, causes higher delay, but the relationship between temperature and time of delay is not that obvious.
+```{r,echo=F,fig.height=3, include=F}
+p2<-ggplot(
+  data=finalw,
+  aes(dep_delay,fill=factor(dewp))
+)+
+  geom_histogram(aes(dep_delay,..density..))+
+  facet_grid("canceled~.")
+p2
+```
+shows the influence of dewp (which is significant) on time of delay in different group:canceled or not canceled.
+### Part b)
+Time of day, day of week, and time of year that might affect delay.
+```{r}
+
+### Part c)
+### Part d)
