@@ -12,7 +12,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ### Preperation
 Load required packages.
 
-```{r,warning = F}
+```{r,message=F,warning = F}
 library(foreign)
 library(ggplot2)
 library(knitr)
@@ -64,7 +64,7 @@ weather<-collect(weather_sqlite)
 
 ## Creat column "date"
 ``` {r}
-final<- final %>%
+final<- flights %>%
   mutate(canceled= ifelse(is.na(arr_time),1,0))%>%
   unite(
     col=date,
@@ -97,9 +97,7 @@ finalw<-finalw %>%
 ## Run the regression
 ```{r}
 regdelay<-lm(dep_delay~temp+dewp+wind_speed+visib,finalw)
-summary(reg)
 regcancel<-glm(canceled~dep_delay+temp+dewp+humid+wind_speed+visib,finalw,family = binomial(logit))
-summary(regcancel)
 ```
 
 Those two reggressions tell us that:
@@ -107,7 +105,7 @@ Those two reggressions tell us that:
 2) For "canceled" : dep_dlay, dewp, humid, visib are statistically significant. We see that when the time of delay increases, it is more unlikely to see the flight canceled (though this is quite counter-intuitive). While the "visib" goes down, it is more likely to be canceled.
 
 ## Plot a graph
-```{r, echo=F, fig.height=3, include=F, warning=F}
+```{r,message = F, warning= F}
 p1<-ggplot(
   data = finalw,
   aes(x = temp,y=dep_delay,size=wind_speed)
@@ -116,7 +114,7 @@ p1<-ggplot(
 p1
 ```
 As we can see above, black points, which indicates low visibility, causes higher delay, but the relationship between temperature and time of delay is not that obvious.
-```{r,echo=F,fig.height=3, include=F,warning=F}
+```{r,message = F, warning= F}
 p2<-ggplot(
   data=finalw,
   aes(dep_delay,fill=factor(dewp))
@@ -133,19 +131,22 @@ Time of day, day of week, and time of year that might affect delay.
 regtime<-lm(dep_delay~factor(month)+factor(day)+dep_time+hour+minute,flights)
 ```
 The result shows that the coefficients of September, October and November are significantly negative, and the coefficients of June & July are obviously greater than others. It make sense since the time of delay are partially determined by the number of customers.
-```{r echo=F, fig.height=3, include=F, warning=F}
+```{r,echo=F}
+flights<-flights %>%
+  mutate(canceled=ifelse(is.na(arr_time),1,0)) %>%
+  group_by(canceled)
+``` 
+```{r}
 p3<-ggplot(
   data=flights,
   aes(x=dep_delay, fill=factor(month))
 )+
   geom_histogram(aes(x=dep_delay, y=..density..))+
   facet_grid("canceled~.")
+p3
 ```
 
 ```{r}
-flights<-flights %>%
-  mutate(canceled=ifelse(is.na(arr_time),1,0))
-
 regtimeCancel<-glm(canceled~dep_delay+dep_time+month+day+hour+minute,flights,family=binomial(logit))
 ```
 The reggression result shows that in this case, only the time of delay has a significant impact on cancellation of flights.
@@ -158,8 +159,8 @@ destairport<-airports %>%
 ```
 ## Run regressions
 ```{r}
-regdest<-lm(dep_delay~dest,destairport)
-regdestCancel<-glm(canceled~dep_delay+dest, desairport, family = binomial(logit))
+regdest<-lm(dep_delay~faa,destairport)
+regdestCancel<-glm(canceled~dep_delay+faa, destairport, family = binomial(logit))
 ```
 Here we see from regression result, that several airports such as BHM(Birmingham Intl), CAE(Columbia Metropolitan), DSM(Des Moines Intl), OKC(Will Rogers World), RIC(Richmond Intl), TUL(Tulsa Intl), TYS(Mc Ghee Tyson) are more likely to delay a flight, while as for cancellation, none of those airports show that kind of significance.
 ```{r,message = F, warning= F}
@@ -181,8 +182,8 @@ airplanes<-planes %>%
 ## Run the regression
 Pay attention that here from both tables we have a variable called "year", but they have different meanings. After merging, they will be renamed as year.x and year.y.
 ```{r}
-regplane<-lm(dep_delay~year.x+factor(model),airplains)
-regplaneCancel<-glm(canceled~dep_delay+year.x+modle,airplains,family = binomial(logit))
+regplane<-lm(dep_delay~year.x+factor(model),airplanes)
+regplaneCancel<-glm(canceled~dep_delay+year.x+model,airplanes,family = binomial(logit))
 ```
 From the first regression we see, none of those variables are significant, which indicates that there is no such concrete proof that older(newer) planes are more likely to delay.
 From the second one, flights with plane model 757-351 and A319-115, are significantly more likely to be canceled, but the magnitude of those coefficients are quite small, so they are just statistically significant but not really significant in real life transportation. This is the same case for the age of planes, they are statistically significant but not much meaningful.
